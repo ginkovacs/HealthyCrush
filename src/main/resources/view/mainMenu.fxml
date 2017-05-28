@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="600.0" styleClass="anchor" xmlns="http://javafx.com/javafx/8.0.60"
+ 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="healthy.crush.controller.MenuController">
+ <stylesheets>
+    <URL value="@../menuBG.css" />
+  </stylesheets>
+   <children>
+      <Button fx:id="startButton" layoutX="200.0" layoutY="236.0" mnemonicParsing="false" onMouseClicked="#startGame" prefHeight="50.0" prefWidth="200.0" text="Start" />
+      <Button layoutX="200.0" layoutY="351.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Highscore" />
+   </children>
+</AnchorPane>
