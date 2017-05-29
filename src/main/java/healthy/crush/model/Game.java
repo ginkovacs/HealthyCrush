@@ -3,22 +3,28 @@ package healthy.crush.model;
 import java.util.Arrays;
 import java.util.Random;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
-
-/* Ez az osztály adja meg az alap játéklogikát. */
+/** This class contains the core logic of the game.
+ * 
+ * <p>
+ * The whole point of this class is to store and later use the data through
+ * setters and getters, allowing them to be changed.
+ * </p>
+ * 
+ * @author Georgina Kovács */
 
 public class Game
 {
-	Cell[][]			gameMap;
-	int					score;
-	int					hp;
-	int					mapSize;
-	int					minPoint;
-	private Timeline	timer;
-	boolean[][]			gameMapMask;
+	Cell[][]	gameMap;
+	int			score;
+	int			hp;
+	int			mapSize;
+	int			minPoint;
+	boolean[][]	gameMapMask;
 
+	/**
+	 * Creates a new instance of the model and initializes it.
+	 *
+	 */
 	public Game(int mapSize, int hp, int minPoint)
 	{
 		gameMap = new Cell[mapSize][mapSize];
@@ -37,7 +43,7 @@ public class Game
 	}
 
 	/**
-	 * A függvény megad legalább egy lehetséges lépést, amit a játék kezdetekor végre lehet hajtani.
+	 * This function creates at least one step on the map at the beginning of the game, thus preventing the player from loosing at the very beginning.
 	 */
 	public void genStep()
 	{
@@ -62,7 +68,7 @@ public class Game
 	}
 
 	/**
-	 * Generál egy véletlenszerű Cell típusú táblát.
+	 * This function generates a random game map, that has Cell vaues in it.
 	 */
 	public void genMap()
 	{
@@ -76,21 +82,12 @@ public class Game
 		update();
 	}
 
-	public void gameTimer()
-	{
-		timer = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-
-		}));
-		timer.setCycleCount(1);
-		timer.play();
-	}
-
 	/**
-	 * Megadja, hogy az adott kordináták körül, kereszt alakban legalább 3 ugyanolyan típus van-e egymás mellett.
+	 * This function returns if there is at least 2 other with the same type as the one we're checking. It also checks the coordinates so it won't go out of the map.
 	 * 
-	 * @param x x koordináta
-	 * @param y y koordináta
-	 * @return igaz-e, hogy legalább 3 ugyanolyan típus van-e egymás mellett
+	 * @param x coordinate of a row
+	 * @param y coordinate of a column
+	 * @return <b>true</b>, if the there are at least 3 of the same type next to each other, <b>false</b> otherwise
 	 */
 
 	public boolean crossTest(int x, int y)
@@ -132,34 +129,28 @@ public class Game
 	}
 
 	/**
-	 * Megcseréli a koordinátákat.
+	 * Swaps the Cell values of the koordinates.
 	 * 
-	 * @param fromX kezdő x koordináta
-	 * @param fromY kezdő y koordináta
-	 * @param toX vég x koordináta
-	 * @param toY vég y koordináta
+	 * @param fromX row of the starter coordinate
+	 * @param fromY colummn of the starter coordinate
+	 * @param toX row of the goal coordinate
+	 * @param toY column of the goal coordinate
 	 */
 	public void swap(int fromX, int fromY, int toX, int toY)
 	{
 		Cell temp = gameMap[fromX][fromY];
 		gameMap[fromX][fromY] = gameMap[toX][toY];
 		gameMap[toX][toY] = temp;
-//		for (int i = 0; i < mapSize; i++) {
-//			for (int j = 0; j < mapSize; j++) {
-//				System.out.print(gameMap[i][j] + "\t");
-//			}
-//			System.out.println();
-//		}
 	}
 
 	/**
-	 * Megadja, hogy egymás mellett vannak-e az elemek és ki lehet-e cserélni a két koordinátán lévő elemeket.
+	 * Checks, if the ones we want to swap are next to each other or not, and checks if there are ate least 2 other of the same type next to each other after swapping them.
 	 * 
-	 * @param fromX kezdő x koordináta
-	 * @param fromY kezdő y koordináta
-	 * @param toX vég x koordináta
-	 * @param toY vég y koordináta
-	 * @return igaz-e, hogy meg lehet cserélni a két koordinátán lévő elemeket
+	 * @param fromX row of the starter coordinate
+	 * @param fromY colummn of the starter coordinate
+	 * @param toX row of the goal coordinate
+	 * @param toY column of the goal coordinate
+	 * @return <b>true</b>, if they are next to one another and at least 3 of the same type are in a row after swap, <b>false</b> otherwise
 	 */
 	public boolean canSwapFromTo(int fromX, int fromY, int toX, int toY)
 	{
@@ -179,6 +170,15 @@ public class Game
 
 	}
 
+	/**
+	 * If we can use the {@link Game#canSwapFromTo(int, int, int, int)}. If it's able to swap, it does, and the player looses a Health Point.
+	 * 
+	 * @param fromX row of the starter coordinate
+	 * @param fromY colummn of the starter coordinate
+	 * @param toX row of the goal coordinate
+	 * @param toY column of the goal coordinate
+	 * @return <b>true</b>, if the player could step, <b>false</b> otherwise
+	 */
 	public boolean step(int fromX, int fromY, int toX, int toY)
 	{
 		if(canSwapFromTo(fromX, fromY, toX, toY)) {
@@ -191,12 +191,12 @@ public class Game
 	}
 
 	/**
-	 * A játéktábla maszk-jában beállítja, hogy mely elemek tartoznak ugyanolyan típusba.
+	 * Checks, where are the other vegetables that has the same type, and changes the value of the mask to true
 	 * 
-	 * @param gameMapMask a játéktábla maszk-ja
-	 * @param type megadott Cell típus
+	 * @param gameMapMask mask of the game map
+	 * @param type a {@link Cell} type
 	 */
-	public void deleteAllVeggiesOfSameType(boolean[][] gameMapMask, Cell type)
+	public void deleteAllVeggiesOfSameType(Cell type)
 	{
 		for (int row = 0; row < mapSize; row++)
 			for (int col = 0; col < mapSize; col++) {
@@ -207,11 +207,12 @@ public class Game
 	}
 
 	/**
+	 * Checks the rows. If count of the same type is greater than 5, it uses the {@link Game#deleteAllVeggiesOfSameType(Cell)} function,
+	 * if the count is 4, it changes the value of the mask to true in the given row,
+	 * if the count is 3, it changes the mask to true on the given cells.
 	 * 
-	 * 
-	 * @param gameMapMask a játéktábla maszk-ja
 	 */
-	public void rowMask(boolean[][] gameMapMask)
+	public void rowMask()
 	{
 
 		for (int row = 0; row < mapSize; row++) {
@@ -231,7 +232,7 @@ public class Game
 						}
 
 						if(count >= 5)
-							deleteAllVeggiesOfSameType(gameMapMask, gameMap[row][col]);
+							deleteAllVeggiesOfSameType(gameMap[row][col]);
 
 						else if(count == 4) {
 							for (int fourCol = 0; fourCol < mapSize; fourCol++)
@@ -245,7 +246,7 @@ public class Game
 					}
 					else {
 						if(count >= 5)
-							deleteAllVeggiesOfSameType(gameMapMask, gameMap[row][col]);
+							deleteAllVeggiesOfSameType(gameMap[row][col]);
 						else if(count == 4) {
 							for (int fourCol = 0; fourCol < mapSize; fourCol++)
 								gameMapMask[row][fourCol] = true;
@@ -262,7 +263,13 @@ public class Game
 		}
 	}
 
-	public void colMask(boolean[][] gameMapMask)
+	/**
+	 * Checks the columns. If count of the same type is greater than 5, it uses the {@link Game#deleteAllVeggiesOfSameType(Cell)} function,
+	 * if the count is 4, it changes the value of the mask to true in the given column,
+	 * if the count is 3, it changes the mask to true on the given cells.
+	 * 
+	 */
+	public void colMask()
 	{
 		for (int col = 0; col < mapSize; col++) {
 			int count = 0;
@@ -281,7 +288,7 @@ public class Game
 						}
 
 						if(count >= 5)
-							deleteAllVeggiesOfSameType(gameMapMask, gameMap[row][col]);
+							deleteAllVeggiesOfSameType(gameMap[row][col]);
 
 						else if(count == 4) {
 							for (int fourRow = 0; fourRow < mapSize; fourRow++)
@@ -296,7 +303,7 @@ public class Game
 
 					else {
 						if(count >= 5)
-							deleteAllVeggiesOfSameType(gameMapMask, gameMap[row][col]);
+							deleteAllVeggiesOfSameType(gameMap[row][col]);
 						else if(count == 4) {
 							for (int fourRow = 0; fourRow < mapSize; fourRow++)
 								gameMapMask[fourRow][col] = true;
@@ -313,17 +320,43 @@ public class Game
 		}
 	}
 
-	public boolean anytingElseToDelete()
+	/**
+	 * The function calls the {@link Game#rowMask()} and the {@link Game#colMask()} methods, then counts the true values in the mask and adds it to the score.
+	 * It changes the cells with the true values of the mask to {@link Cell#EMPTY} and changes the mask back to false.
+	 * 
+	 * @return <b>true</b> if the map was deleted, <b>false</b> if not
+	 */
+
+	public boolean delete()
 	{
-		for (int x = 0; x < mapSize; x++) {
-			for (int y = 0; y < mapSize; y++) {
-				if(crossTest(x, y))
-					return true;
+
+		boolean wasDeleted = false;
+		rowMask();
+		colMask();
+
+		for (int row = 0; row < mapSize; row++) {
+			for (int col = 0; col < mapSize; col++) {
+				if(gameMapMask[row][col]) {
+					score++;
+				}
 			}
 		}
-		return false;
+		for (int row = 0; row < mapSize; row++) {
+			for (int col = 0; col < mapSize; col++) {
+				if(gameMapMask[row][col]) {
+					gameMap[row][col] = Cell.EMPTY;
+					gameMapMask[row][col] = false;
+					wasDeleted = true;
+				}
+			}
+		}
+
+		return wasDeleted;
 	}
 
+	/**
+	 * This function gives the {@link Cell#EMPTY} type cells a randomly generated Cell value.
+	 */
 	public void reworkGameMap()
 	{
 
@@ -339,34 +372,9 @@ public class Game
 
 	}
 
-	public boolean delete()
-	{
-
-		boolean wasDeleted = false;
-		rowMask(gameMapMask);
-		colMask(gameMapMask);
-
-		for (int row = 0; row < mapSize; row++) {
-			for (int col = 0; col < mapSize; col++) {
-				if(gameMapMask[row][col]) {
-					score++;
-					wasDeleted = true;
-				}
-			}
-		}
-		for (int row = 0; row < mapSize; row++) {
-			for (int col = 0; col < mapSize; col++) {
-				if(gameMapMask[row][col]) {
-					gameMap[row][col] = Cell.EMPTY;
-					gameMapMask[row][col] = false;
-
-				}
-			}
-		}
-
-		return wasDeleted;
-	}
-
+	/**
+	 * This method keeps reworking the game map until there is nothing else to delete anymore.
+	 */
 	public void update()
 	{
 		while (delete()) {
@@ -374,36 +382,61 @@ public class Game
 		}
 	}
 
+	/**
+	 * Returns a {@link Cell} type game map.
+	 * 
+	 * @return  a {@link Cell} type game map
+	 */
 	public Cell[][] getGameMap()
 	{
 		return gameMap;
 	}
 
+	/**
+	 * Returns the health of the player.
+	 * 
+	 * @return hp
+	 */
 	public int getHp()
 	{
 		return hp;
 	}
 
+	/**
+	 * Returns the score of the player.
+	 * 
+	 * @return score
+	 */
 	public int getScore()
 	{
 		return score;
 	}
 
+	/**
+	 * Sets the score.
+	 * 
+	 * @param score score
+	 */
 	public void setScore(int score)
 	{
 		this.score = score;
 	}
 
+	/**
+	 * Returns the minimum points to win the game.
+	 * 
+	 * @return minPoint
+	 */
 	public int getMinPoint()
 	{
 		return minPoint;
 	}
 
-	public void setMinPoint(int minPoint)
-	{
-		this.minPoint = minPoint;
-	}
-
+	/**
+	 * Sets the players Health Point.
+	 * 
+	 * @param hp hp
+	 */
 	public void setHp(int hp)
 	{
 		this.hp = hp;

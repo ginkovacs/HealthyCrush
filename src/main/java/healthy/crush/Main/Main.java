@@ -11,6 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * The purpose of this class is to launch the main menu window.
+ * 
+ * @author Georgina Kovács
+ *
+ */
 public class Main extends Application
 {
 

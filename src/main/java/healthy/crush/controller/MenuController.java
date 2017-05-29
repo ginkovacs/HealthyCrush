@@ -28,6 +28,9 @@ public class MenuController implements Initializable
 
 	}
 
+	/**
+	 * After clicking on the {@link startButton} it opens the game window.
+	 */
 	public void startGame()
 	{
 

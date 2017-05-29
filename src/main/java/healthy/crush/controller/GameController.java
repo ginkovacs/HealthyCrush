@@ -15,7 +15,6 @@ import healthy.crush.score.Score;
 import healthy.crush.view.CellImageView;
 import healthy.crush.view.GameImages;
 import healthy.crush.view.PositionImageView;
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,7 +28,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class GameController implements Initializable
 {
@@ -73,14 +71,6 @@ public class GameController implements Initializable
 		gameHpLabel.setText(String.valueOf(game.getHp()));
 		gameMinPointLabel.setText(String.valueOf(game.getMinPoint()));
 		gameHighscoreLabel.setText(String.valueOf(Score.loadXML()));
-
-//		for (int i = 0; i < 7; i++) {
-//			for (int j = 0; j < 7; j++) {
-//				System.out.print(map[i][j] + "\t");
-//			}
-//			System.out.println();
-//		}
-//		System.out.println();
 
 		for (int row = 0; row < 7; row++) {
 			for (int col = 0; col < 7; col++) {
@@ -132,19 +122,11 @@ public class GameController implements Initializable
 
 		update();
 		map = game.getGameMap();
-
-		for (
-
-				int i = 0; i < 7; i++
-		) {
-			for (int j = 0; j < 7; j++) {
-				System.out.print(map[i][j] + "\t");
-			}
-			System.out.println();
-		}
-		System.out.println(".");
 	}
 
+	/**
+	 * After clicking on the {@link surButton} it goes back to the main menu.
+	 */
 	public void surrenderGame()
 	{
 		try {
@@ -162,6 +144,9 @@ public class GameController implements Initializable
 		}
 	}
 
+	/**
+	 * At the end of the game it goes back to the main menu and sets the health and score back.
+	 */
 	public void endGame()
 	{
 
@@ -192,6 +177,9 @@ public class GameController implements Initializable
 		return null;
 	}
 
+	/**
+	 * Keeps updating the game and checks if the player won or lost. If the player won, it saves the score.
+	 */
 	private void update()
 	{
 
@@ -213,10 +201,10 @@ public class GameController implements Initializable
 				}
 
 			}
-			PauseTransition pause = new PauseTransition(Duration.seconds(3));
-			pause.setOnFinished(event -> {
-			});
-			pause.play();
+//			PauseTransition pause = new PauseTransition(Duration.seconds(3));
+//			pause.setOnFinished(event -> {
+//			});
+//			pause.play();
 			updateui();
 
 		}
