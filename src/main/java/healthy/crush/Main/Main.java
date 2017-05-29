@@ -2,6 +2,9 @@ package healthy.crush.Main;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +13,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application
 {
+
+	private static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	@Override
 	public void start(Stage primaryStage)
@@ -25,7 +30,7 @@ public class Main extends Application
 
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 

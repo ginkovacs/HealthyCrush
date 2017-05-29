@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import healthy.crush.model.Cell;
 import healthy.crush.model.CellImageView;
 import healthy.crush.model.Game;
@@ -35,13 +38,21 @@ public class GameController implements Initializable
 	private GridPane gameGridPane;
 
 	@FXML
-	private Label gameLabel;
+	private Label gameScoreLabel;
+
+	@FXML
+	private Label gameHpLabel;
+
+	@FXML
+	private Label gameMinPointLabel;
+
+	private static Logger logger = LoggerFactory.getLogger(GameController.class);
 
 	List<CellImageView>	cellImageViewList	= new ArrayList<>();
 	CellImageView		first				= new CellImageView();
 
 	boolean	isFirst	= true;
-	Game	game	= new Game(7, 0, 1, 10);
+	Game	game	= new Game(7, 0, 10, 10);
 
 	DropShadow dropShadow = new DropShadow(60, Color.IVORY);
 
@@ -53,13 +64,16 @@ public class GameController implements Initializable
 
 		Cell[][] map = game.getGameMap();
 
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 7; j++) {
-				System.out.print(map[i][j] + "\t");
-			}
-			System.out.println();
-		}
-		System.out.println();
+		gameHpLabel.setText(String.valueOf(game.getHp()));
+		gameMinPointLabel.setText(String.valueOf(game.getMinPoint()));
+
+//		for (int i = 0; i < 7; i++) {
+//			for (int j = 0; j < 7; j++) {
+//				System.out.print(map[i][j] + "\t");
+//			}
+//			System.out.println();
+//		}
+//		System.out.println();
 
 		for (int row = 0; row < 7; row++) {
 			for (int col = 0; col < 7; col++) {
@@ -103,6 +117,8 @@ public class GameController implements Initializable
 						}
 
 					}
+					game.setHp(game.getHp() - 1);
+
 				});
 
 			}
@@ -133,7 +149,7 @@ public class GameController implements Initializable
 			menuStage.setScene(scene);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -171,6 +187,14 @@ public class GameController implements Initializable
 //			pause.play();
 //			game.del();
 			game.reworkGameMap();
+
+			if(game.getHp() == 0) {
+				if(game.getScore() >= game.getMinPoint())
+					logger.info("You won! :");
+				else
+					logger.info("You lost... :(");
+			}
+
 			updateui();
 		}
 	}
@@ -185,7 +209,9 @@ public class GameController implements Initializable
 				cellImageView.setImage(GameImages.getInstance().getImage(map[row][col]));
 			}
 		}
-		gameLabel.setText(String.valueOf(game.getScore()));
+		gameScoreLabel.setText(String.valueOf(game.getScore()));
+		gameHpLabel.setText(String.valueOf(game.getHp()));
+
 	}
 
 }

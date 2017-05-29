@@ -16,7 +16,33 @@
     <URL value="@../menuBG.css" />
   </stylesheets>
    <children>
-      <Label fx:id="gameLabel" alignment="CENTER" cache="true" contentDisplay="CENTER" layoutX="131.0" layoutY="18.0" prefHeight="25.0" prefWidth="70.0" text="Label" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" AnchorPane.topAnchor="16.0">
+	<Label fx:id="gameScoreLabel" alignment="CENTER" cache="true" contentDisplay="CENTER" layoutX="156.0" layoutY="14.0" prefHeight="25.0" prefWidth="70.0" style="-fx-font-weight: bold;" text="0" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+
+      </Label>
+            <Label layoutX="109.0" layoutY="14.0" style="-fx-font-weight: bold;" text="Score:" textAlignment="CENTER" textFill="WHITE" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+            <Label layoutX="289.0" layoutY="18.0" style="-fx-font-weight: bold;" text="Health:" textAlignment="CENTER" textFill="#4de3ff" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="gameHpLabel" layoutX="375.0" layoutY="18.0" style="-fx-font-weight: bold;" text="0" textFill="#4de3ff" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+            <Label layoutX="442.0" layoutY="18.0" style="-fx-font-weight: bold;" text="Min Point:" textAlignment="CENTER"
+             textFill="#ff82d1" AnchorPane.topAnchor="14.0">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Label  fx:id="gameMinPointLabel" layoutX="565.0" layoutY="18.0" style="-fx-font-weight: bold;" text="0" textAlignment="CENTER" textFill="#ff82d1" AnchorPane.topAnchor="14.0">
          <font>
             <Font size="16.0" />
          </font>

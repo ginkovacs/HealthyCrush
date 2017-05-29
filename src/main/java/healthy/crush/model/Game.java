@@ -3,6 +3,10 @@ package healthy.crush.model;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import healthy.crush.Main.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -16,6 +20,8 @@ public class Game
 	int					minPoint;
 	private Timeline	timer;
 	boolean[][]			gameMapMask;
+
+	private static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	public Game(int mapSize, int score, int hp, int minPoint)
 	{
@@ -516,17 +522,6 @@ public class Game
 		while (delete()) {
 			reworkGameMap();
 		}
-		/* else {
-		 * if(getHp() == 0) {
-		 * if(score >= minPoint) {
-		 * System.out.println("you won! :)");
-		 * }
-		 * else
-		 * System.out.println("you lost... :(");
-		 * }
-		 * else
-		 * isStepOnTable();
-		 * } */
 	}
 
 	public Cell[][] getGameMap()
@@ -544,10 +539,19 @@ public class Game
 		return score;
 	}
 
-	@Override
-	public String toString()
+	public int getMinPoint()
 	{
-		return "Game [score=" + score + "]";
+		return minPoint;
+	}
+
+	public void setMinPoint(int minPoint)
+	{
+		this.minPoint = minPoint;
+	}
+
+	public void setHp(int hp)
+	{
+		this.hp = hp;
 	}
 
 }

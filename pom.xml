@@ -7,8 +7,8 @@
   <version>1.0</version>
   <packaging>jar</packaging>
   <inceptionYear>2017</inceptionYear>
-	<organization>
-    <name>University of DEbrecen</name>
+<organization>
+    <name>University of Debrecen</name>
     <url>https://www.inf.unideb.hu/</url>
   </organization>
 	<description>
@@ -16,7 +16,7 @@
 	</description>
 
   
-  <name>HC</name>
+  <name>Healthy Crush</name>
   <url>http://maven.apache.org</url>
   
   	<developers>
@@ -45,6 +45,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<slf4j.version>1.7.25</slf4j.version>
+		<tinylog.version>1.2</tinylog.version>
 	</properties>
 
   <dependencies>
@@ -54,16 +55,28 @@
 			<version>${slf4j.version}</version>
 			<scope>compile</scope>
 		</dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
+	    <dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <version>4.12</version>
+	      <scope>test</scope>
+	    </dependency>
+	    <dependency>
 			<groupId>org.jdom</groupId>
 			<artifactId>jdom2</artifactId>
 			<version>2.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tinylog</groupId>
+			<artifactId>tinylog</artifactId>
+			<version>${tinylog.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.tinylog</groupId>
+			<artifactId>slf4j-binding</artifactId>
+			<version>${tinylog.version}</version>
+			<scope>runtime</scope>
 		</dependency>
   </dependencies>
   
