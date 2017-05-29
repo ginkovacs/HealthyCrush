@@ -10,10 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import healthy.crush.model.Cell;
-import healthy.crush.model.CellImageView;
 import healthy.crush.model.Game;
-import healthy.crush.model.GameImages;
-import healthy.crush.model.PositionImageView;
+import healthy.crush.score.Score;
+import healthy.crush.view.CellImageView;
+import healthy.crush.view.GameImages;
+import healthy.crush.view.PositionImageView;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,6 +29,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class GameController implements Initializable
 {
@@ -46,15 +49,18 @@ public class GameController implements Initializable
 	@FXML
 	private Label gameMinPointLabel;
 
+	@FXML
+	private Label gameHighscoreLabel;
+
 	private static Logger logger = LoggerFactory.getLogger(GameController.class);
 
 	List<CellImageView>	cellImageViewList	= new ArrayList<>();
 	CellImageView		first				= new CellImageView();
 
 	boolean	isFirst	= true;
-	Game	game	= new Game(7, 0, 10, 10);
+	Game	game	= new Game(7, 10, 50);
 
-	DropShadow dropShadow = new DropShadow(60, Color.IVORY);
+	DropShadow dropShadow = new DropShadow(10, Color.IVORY);
 
 	public void initialize(URL location, ResourceBundle resources)
 	{
@@ -66,6 +72,7 @@ public class GameController implements Initializable
 
 		gameHpLabel.setText(String.valueOf(game.getHp()));
 		gameMinPointLabel.setText(String.valueOf(game.getMinPoint()));
+		gameHighscoreLabel.setText(String.valueOf(Score.loadXML()));
 
 //		for (int i = 0; i < 7; i++) {
 //			for (int j = 0; j < 7; j++) {
@@ -102,22 +109,21 @@ public class GameController implements Initializable
 								int secondCol = second.getPosition().getCol();
 
 								isFirst = true;
-								if((firstRow == secondRow && (firstCol == secondCol - 1 || firstCol == secondCol + 1))
-										|| (firstCol == secondCol
-												&& (firstRow == secondRow - 1 || firstRow == secondRow + 1))) {
-									game.canSwapFromTo(firstRow, firstCol,
-											secondRow, secondCol);
-									game.swap(firstRow, firstCol, secondRow,
-											secondCol);
+								if(game.step(firstRow, firstCol, secondRow, secondCol)) {
+									gameHpLabel.setText(String.valueOf(game.getHp()));
 								}
 
 								update();
 							}
+							isFirst = true;
+
 							cellImageView.setEffect(null);
+							if(first != null)
+								first.setEffect(null);
+							first = null;
 						}
 
 					}
-					game.setHp(game.getHp() - 1);
 
 				});
 
@@ -127,7 +133,10 @@ public class GameController implements Initializable
 		update();
 		map = game.getGameMap();
 
-		for (int i = 0; i < 7; i++) {
+		for (
+
+				int i = 0; i < 7; i++
+		) {
 			for (int j = 0; j < 7; j++) {
 				System.out.print(map[i][j] + "\t");
 			}
@@ -153,6 +162,26 @@ public class GameController implements Initializable
 		}
 	}
 
+	public void endGame()
+	{
+
+		try {
+			FXMLLoader gameLoader = new FXMLLoader(getClass().getResource("/view/mainMenu.fxml"));
+			AnchorPane root = gameLoader.load();
+			Scene scene = new Scene(root);
+
+			Stage gameStage = (Stage) gameScoreLabel.getScene().getWindow();
+
+			gameStage.setScene(scene);
+		}
+		catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+
+		game.setHp(10);
+		game.setScore(0);
+	}
+
 	private Node nodeFromGridPane(GridPane gameGridPane, int col, int row)
 	{
 		for (Node node : gameGridPane.getChildren()) {
@@ -163,39 +192,33 @@ public class GameController implements Initializable
 		return null;
 	}
 
-//	private void swap(CellImageView first, CellImageView second)
-//	{
-//		PositionImageView firstPosition = first.getPosition();
-//		PositionImageView secondPosition = second.getPosition();
-//
-//		gameGridPane.getChildren().remove(first);
-//		gameGridPane.getChildren().remove(second);
-//		gameGridPane.add(first, secondPosition.getCol(), secondPosition.getRow());
-//		gameGridPane.add(second, firstPosition.getCol(), firstPosition.getRow());
-//
-//		first.setPosition(secondPosition);
-//		second.setPosition(firstPosition);
-//
-//	}
 	private void update()
 	{
 
 		while (game.delete()) {
 			updateui();
-//			PauseTransition pause = new PauseTransition(Duration.seconds(1));
-//			pause.setOnFinished(event -> game.del());
-//			pause.play();
-//			game.del();
+
 			game.reworkGameMap();
 
-			if(game.getHp() == 0) {
-				if(game.getScore() >= game.getMinPoint())
-					logger.info("You won! :");
-				else
+			if(game.getHp() <= 0) {
+				int score = game.getScore();
+				if(game.getScore() >= game.getMinPoint()) {
+					logger.info("You won! :)");
+					Score.saveXML(score);
+					endGame();
+				}
+				else {
 					logger.info("You lost... :(");
-			}
+					endGame();
+				}
 
+			}
+			PauseTransition pause = new PauseTransition(Duration.seconds(3));
+			pause.setOnFinished(event -> {
+			});
+			pause.play();
 			updateui();
+
 		}
 	}
 
@@ -209,9 +232,8 @@ public class GameController implements Initializable
 				cellImageView.setImage(GameImages.getInstance().getImage(map[row][col]));
 			}
 		}
+
 		gameScoreLabel.setText(String.valueOf(game.getScore()));
 		gameHpLabel.setText(String.valueOf(game.getHp()));
-
 	}
-
 }

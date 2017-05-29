@@ -11,8 +11,8 @@
     <URL value="@../menuBG.css" />
   </stylesheets>
    <children>
-      <Button fx:id="startButton" layoutX="200.0" layoutY="236.0" mnemonicParsing="false" onMouseClicked="#startGame" prefHeight="50.0" prefWidth="200.0" text="Start" />
-      <Button layoutX="200.0" layoutY="351.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Highscore" />
+      <Button fx:id="startButton" layoutX="200.0" layoutY="350.0" mnemonicParsing="false" onMouseClicked="#startGame" prefHeight="50.0" prefWidth="200.0" text="Start" />
+     <!-- <Button layoutX="200.0" layoutY="351.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Highscore" /> -->
       <Label layoutX="139.0" layoutY="61.0" prefHeight="98.0" prefWidth="322.0" style="-fx-font-weight: bold; -fx-font-style: italic;" text="Healthy" textFill="#39fcff">
          <font>
             <Font size="50.0" />

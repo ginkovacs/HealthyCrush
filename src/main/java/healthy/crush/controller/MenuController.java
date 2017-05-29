@@ -25,7 +25,7 @@ public class MenuController implements Initializable
 
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		// startButton.setText("Start from init");
+
 	}
 
 	public void startGame()

@@ -1,8 +1,9 @@
-package healthy.crush.model;
+package healthy.crush.view;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import healthy.crush.model.Cell;
 import javafx.scene.image.Image;
 
 public class GameImages

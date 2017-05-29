@@ -1,4 +1,4 @@
-package healthy.crush.model;
+package healthy.crush.view;
 
 import javafx.scene.image.ImageView;
 

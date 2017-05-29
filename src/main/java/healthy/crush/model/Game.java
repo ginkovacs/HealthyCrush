@@ -3,13 +3,11 @@ package healthy.crush.model;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import healthy.crush.Main.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+
+/* Ez az osztály adja meg az alap játéklogikát. */
 
 public class Game
 {
@@ -21,9 +19,7 @@ public class Game
 	private Timeline	timer;
 	boolean[][]			gameMapMask;
 
-	private static Logger logger = LoggerFactory.getLogger(Main.class);
-
-	public Game(int mapSize, int score, int hp, int minPoint)
+	public Game(int mapSize, int hp, int minPoint)
 	{
 		gameMap = new Cell[mapSize][mapSize];
 
@@ -31,7 +27,7 @@ public class Game
 		for (Cell[] row : gameMap)
 			Arrays.fill(row, Cell.EMPTY);
 
-		this.score = score;
+		// this.score = score;
 
 		this.hp = hp;
 
@@ -99,149 +95,37 @@ public class Game
 
 	public boolean crossTest(int x, int y)
 	{
-		Cell cellForTest = gameMap[x][y];
-		int eqInRow = 0;
-
-		// FÜGGŐLEGES
-		// első sor
-		if(x == 0) {
-			for (int i = 1; i < 3; i++) {
-				if(gameMap[x + i][y].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
+		int minx = (x - 2) < 0 ? 0 : x - 2;
+		int maxx = (x + 2) > mapSize - 1 ? mapSize - 1 : x + 2;
+		int miny = (y - 2) < 0 ? 0 : y - 2;
+		int maxy = (y + 2) > mapSize - 1 ? mapSize - 1 : y + 2;
+		int count = 0;
+		Cell tempc = Cell.EMPTY;
+		for (int i = minx; i <= maxx; i++) {
+			if(tempc.equals(gameMap[i][y])) {
+				count++;
 			}
-			if(eqInRow >= 3)
+			else {
+				count = 1;
+				tempc = gameMap[i][y];
+			}
+			if(count >= 3)
 				return true;
 		}
 
-		// második sor
-		else if(x == 1) {
-			for (int i = -1; i < 3; i++) {
-				if(gameMap[x + i][y].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
-			}
-			if(eqInRow >= 3)
+		count = 0;
+		tempc = Cell.EMPTY;
+		for (int i = miny; i <= maxy; i++) {
+			if(count >= 3)
 				return true;
-		}
-
-		// utolsó előtti sor
-		else if(x == mapSize - 2) {
-			for (int i = -2; i < 2; i++) {
-				if(gameMap[x + i][y].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
+			if(tempc.equals(gameMap[x][i])) {
+				count++;
 			}
-			if(eqInRow >= 3)
-				return true;
-		}
-
-		// utolsó sor
-		else if(x == mapSize - 1) {
-			for (int i = -2; i < 1; i++) {
-				if(gameMap[x + i][y].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
+			else {
+				count = 1;
+				tempc = gameMap[x][i];
 			}
-			if(eqInRow >= 3)
-				return true;
-		}
-
-		// többi sor
-		else {
-			for (int i = -2; i < 3; i++) {
-				if(gameMap[x + i][y].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
-			}
-			if(eqInRow >= 3)
-				return true;
-		}
-
-		// VIZSZINTES
-		eqInRow = 0;
-
-		// első oszlop
-		if(y == 0) {
-			for (int i = 1; i < 3; i++) {
-				if(gameMap[x][y + i].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
-			}
-			if(eqInRow >= 3)
-				return true;
-		}
-
-		// második oszlop
-		else if(y == 1) {
-			for (int i = -1; i < 3; i++) {
-				if(gameMap[x][y + i].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
-			}
-			if(eqInRow >= 3)
-				return true;
-		}
-
-		// utolsó előtti oszlop
-		else if(y == mapSize - 2) {
-			for (int i = -2; i < 2; i++) {
-				if(gameMap[x][y + i].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
-			}
-			if(eqInRow >= 3)
-				return true;
-		}
-
-		// utolsó oszlop
-		else if(y == mapSize - 1) {
-			for (int i = -2; i < 1; i++) {
-				if(gameMap[x][y + i].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
-			}
-			if(eqInRow >= 3)
-				return true;
-		}
-
-		else {
-			for (int i = -2; i < 3; i++) {
-				if(gameMap[x][y + i].equals(cellForTest)) {
-					eqInRow++;
-				}
-				else {
-					eqInRow = 0;
-				}
-			}
-			if(eqInRow >= 3)
+			if(count >= 3)
 				return true;
 		}
 		return false;
@@ -280,18 +164,30 @@ public class Game
 	public boolean canSwapFromTo(int fromX, int fromY, int toX, int toY)
 	{
 		boolean canSwap = false;
+		if(((fromX == toX || (fromY == toY)) && (Math.abs(fromX - toX) < 2 && Math.abs(fromY - toY) < 2))) {
 
-		swap(fromX, fromY, toX, toY);
+			swap(fromX, fromY, toX, toY);
 
-		if(crossTest(toX, toY) || crossTest(fromX, fromY)) {
-			canSwap = true;
-			// swap(fromX, fromY, toX, toY);
+			if(crossTest(toX, toY) || crossTest(fromX, fromY)) {
+				canSwap = true;
+			}
+			else
+				canSwap = false;
+			swap(toX, toY, fromX, fromY);
 		}
-		else
-			canSwap = false;
-		swap(toX, toY, fromX, fromY);
 		return canSwap;
 
+	}
+
+	public boolean step(int fromX, int fromY, int toX, int toY)
+	{
+		if(canSwapFromTo(fromX, fromY, toX, toY)) {
+			swap(fromX, fromY, toX, toY);
+			hp--;
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -428,39 +324,6 @@ public class Game
 		return false;
 	}
 
-	public void shuffle()
-	{
-		Random random = new Random();
-
-		for (int i = gameMap.length - 1; i > 0; i--) {
-			for (int j = gameMap[i].length - 1; j > 0; j--) {
-				int m = random.nextInt(i + 1);
-				int n = random.nextInt(j + 1);
-
-				Cell temp = gameMap[i][j];
-				gameMap[i][j] = gameMap[m][n];
-				gameMap[m][n] = temp;
-			}
-		}
-
-	}
-
-	public boolean isStepOnTable()
-	{
-		boolean canStep = false;
-		for (int row = 0; row < mapSize; row++) {
-			for (int col = 0; col < mapSize; col++) {
-				if(crossTest(row, col))
-					canStep = true;
-				else {
-					shuffle();
-					canStep = false;
-				}
-			}
-		}
-		return canStep;
-	}
-
 	public void reworkGameMap()
 	{
 
@@ -475,19 +338,6 @@ public class Game
 		}
 
 	}
-
-//	public void del()
-//	{
-//		for (int row = 0; row < mapSize; row++) {
-//			for (int col = 0; col < mapSize; col++) {
-//				if(gameMapMask[row][col]) {
-//					gameMap[row][col] = Cell.EMPTY;
-//					gameMapMask[row][col] = false;
-//
-//				}
-//			}
-//		}
-//	}
 
 	public boolean delete()
 	{
@@ -537,6 +387,11 @@ public class Game
 	public int getScore()
 	{
 		return score;
+	}
+
+	public void setScore(int score)
+	{
+		this.score = score;
 	}
 
 	public int getMinPoint()
