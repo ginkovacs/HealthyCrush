@@ -193,7 +193,6 @@ public class Game
 	/**
 	 * Checks, where are the other vegetables that has the same type, and changes the value of the mask to true
 	 * 
-	 * @param gameMapMask mask of the game map
 	 * @param type a {@link Cell} type
 	 */
 	public void deleteAllVeggiesOfSameType(Cell type)
