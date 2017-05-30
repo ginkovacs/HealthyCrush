@@ -20,6 +20,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -193,10 +195,12 @@ public class GameController implements Initializable
 				if(game.getScore() >= game.getMinPoint()) {
 					logger.info("You won! :)");
 					Score.saveXML(score);
+					winDow();
 					endGame();
 				}
 				else {
 					logger.info("You lost... :(");
+					lose();
 					endGame();
 				}
 
@@ -223,5 +227,25 @@ public class GameController implements Initializable
 
 		gameScoreLabel.setText(String.valueOf(game.getScore()));
 		gameHpLabel.setText(String.valueOf(game.getHp()));
+	}
+
+	private void winDow()
+	{
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("WIN_DOW");
+		alert.setHeaderText(null);
+		alert.setContentText("Congrats! You won! :)");
+
+		alert.showAndWait();
+	}
+
+	private void lose()
+	{
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Lose");
+		alert.setHeaderText(null);
+		alert.setContentText("You lost... :( Maybe next time.");
+
+		alert.showAndWait();
 	}
 }
