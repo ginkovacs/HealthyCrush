@@ -81,4 +81,38 @@ public class gameTest
 			}
 		}
 	}
+
+	@Test
+	public void checkStep()
+	{
+		game = spy(new Game(7, 10, 50));
+
+		game.genMap();
+
+		game.getGameMap()[3][3] = Cell.ONION;
+		game.getGameMap()[3][5] = Cell.ONION;
+		game.getGameMap()[3][6] = Cell.ONION;
+
+		Cell first = game.getGameMap()[3][3];
+		Cell second = game.getGameMap()[3][4];
+
+		game.step(3, 3, 3, 4);
+
+		assertEquals(first, game.getGameMap()[3][4]);
+		assertEquals(second, game.getGameMap()[3][3]);
+
+		game.getGameMap()[0][0] = Cell.ONION;
+		game.getGameMap()[0][2] = Cell.ONION;
+		game.getGameMap()[0][3] = Cell.ONION;
+
+		first = game.getGameMap()[0][0];
+		second = game.getGameMap()[0][1];
+
+		game.step(3, 3, 3, 4);
+
+		assertEquals(first, game.getGameMap()[0][0]);
+		assertEquals(second, game.getGameMap()[0][1]);
+
+	}
+
 }
