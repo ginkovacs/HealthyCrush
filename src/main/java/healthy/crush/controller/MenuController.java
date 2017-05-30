@@ -15,7 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class MenuController implements Initializable
+class MenuController implements Initializable
 {
 
 	@FXML

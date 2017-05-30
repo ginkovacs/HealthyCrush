@@ -442,4 +442,14 @@ public class Game
 		this.hp = hp;
 	}
 
+	/**
+	 * Returns the mask of the game map.
+	 * @return the mask of the game map
+	 */
+
+	public boolean[][] getGameMapMask()
+	{
+		return gameMapMask;
+	}
+
 }
