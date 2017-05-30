@@ -17,6 +17,11 @@ public class Score
 	private static Document	xmlFile;
 	private static File		scoreFile;
 
+	/**
+	 * If there's no score.xml file in the home directory, it creates one with scores elements in it. 
+	 * 
+	 * @throws IOException IOException when an IO error has occurred.
+	 */
 	public static void createScoreXML() throws IOException
 	{
 
@@ -42,6 +47,12 @@ public class Score
 		}
 	}
 
+	/**
+	 * Updates the xml file, using the loaded data.
+	 * 
+	 * @throws IOException when an IO error has occurred.
+	 */
+
 	private static void updateXML() throws IOException
 	{
 		FileOutputStream out = new FileOutputStream(scoreFile);
@@ -51,6 +62,11 @@ public class Score
 		out.close();
 	}
 
+	/**
+	 * Saves a score element in the xml file, than updates it.
+	 * 
+	 * @param score the score to be saved
+	 */
 	public static void saveXML(int score)
 	{
 		Element scoreElem = new Element("score");
@@ -67,6 +83,11 @@ public class Score
 		}
 	}
 
+	/**
+	 * Checks, if there is a file to be loaded, and loads in the highest of it's scores.
+	 * 
+	 * @return highest of the scores
+	 */
 	public static int loadXML()
 	{
 
